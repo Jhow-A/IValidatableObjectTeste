@@ -1,0 +1,75 @@
+﻿@model DateModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<form asp-controller="Home" asp-action="Index">
+    <div class="mt-5">
+        <dl class="form-row m-0">
+            <dt class="col-2 text-right col-form-label-sm">Período:</dt>
+            <dd class="col-3">
+                <sub class="font-weight-bold text-secondary">@Html.DisplayNameFor(m => m.DataInicial)  </sub>
+                <input asp-for="DataInicial" type="date" class="form-control" />
+            </dd>
+            <dd class="col-3">
+                <sub class="font-weight-bold text-secondary">@Html.DisplayNameFor(m => m.DataFinal)</sub>
+                <input asp-for="DataFinal" type="date" class="form-control" />
+            </dd>
+        </dl>
+
+        <dl class="form-row m-0">
+            <dd class="offset-2 col">
+                ﻿@if (ViewData.ModelState.ContainsKey("Summary"))
+                {
+                    <div class="alert alert-warning">
+                        <div>@ViewData.ModelState["Summary"].AttemptedValue</div>
+                    </div>
+                }
+
+                @if (ViewData.ModelState.IsValid == false)
+                {
+                    var errors = ViewData.ModelState.Values.Where(i => i.Errors.Any()).Select(s => s.Errors);
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <sup>&times;</sup>
+                        </button>
+                        <strong class="alert-heading" style="white-space: nowrap">Foram encontrados os seguintes erros:</strong>
+                        <div class="m-0">
+                            @foreach (var error in errors)
+                            {
+                                foreach (var message in error)
+                                {
+                                    <div class="row">
+                                        <span class="col">@(String.IsNullOrWhiteSpace(message.ErrorMessage) ? message.Exception.Message : message.ErrorMessage)</span>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+
+                ﻿@if (ViewBag.Message is not null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <sup>&times;</sup>
+                        </button>
+                        <div class="m-0"> @ViewBag.Message </div>
+                    </div>
+                }
+            </dd>
+        </dl>
+
+        <dl class="form-row m-0">
+            <dd class="offset-2 col-3">
+                <button type="submit" class="btn btn-primary">Validar</button>
+            </dd>
+        </dl>
+    </div>
+</form>
